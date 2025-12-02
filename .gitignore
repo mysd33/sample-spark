@@ -1,0 +1,15 @@
+### SBT/Scala ###
+target/
+project/target/
+project/project/
+.bsp/
+
+### IntelliJ IDEA ##
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+### Log Files ###
+*.log
