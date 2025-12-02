@@ -1,8 +1,8 @@
 # Hadoop SparkのサンプルAP
 
-## 概要
+## 1. 概要
 - 作成中です。
-    - 以前作成した[Hadoop SparkのサンプルAP](https://github.com/mysd33/spark_dev)が、古いHadoop/Sparkのバージョンのままのため、最新バージョンに対応させ移植する予定。
+    - 現在、以前作成した[Hadoop SparkのサンプルAP](https://github.com/mysd33/spark_dev)が、古いHadoop/Sparkのバージョンのままだったため、最新のHadoop/Sparkバージョンに対応させて移植する作業をしています。
 
 - 利用バージョン
     - Corretto JDK 21
@@ -10,17 +10,17 @@
     - Hadoop 3.4.0
     - Apache Spark 4.0.1
 
-## プロジェクト構成
-- sample-spark ルートプロジェクト
-    - application 業務APサブプロジェクト
-    - sparkFramework SparkAPのAP基盤サブプロジェクト。Spark標準機能のみに依存
-    - sparkTestFramework SparkAP用の拡張テストフレームワークサブプロジェクト
-    - testdata 業務APを動作させるためのテストデータファイルのフォルダ
+## 2. プロジェクト構成
+- 以下のプロジェクト構成です。通常は、IntelliJ IDEAでのプロジェクトとして読み込んでください。
+    - sample-spark： ルートプロジェクト
+        - application： 業務APサブプロジェクト
+        - sparkFramework： SparkAPのAP基盤サブプロジェクト。Spark標準機能のみに依存
+        - sparkTestFramework： SparkAP用の拡張テストフレームワークサブプロジェクト
+        - testdata： 業務APを動作させるためのテストデータファイルのフォルダ
 
-
-## WindowsでのApache Spark環境構築手順
-- Windows 11で、Hadoop/Sparkの開発環境を構築する手順を示す。
-- 参考: [https://sparkbyexamples.com/spark/apache-spark-installation-on-windows/](https://sparkbyexamples.com/spark/apache-spark-installation-on-windows/)
+## 3. WindowsでのApache Spark環境構築手順
+- 通常SparkはLinux環境で動作させますが、Windows 11の端末でHadoop/Sparkの開発環境を構築する手順を示します。
+    - 参考: [https://sparkbyexamples.com/spark/apache-spark-installation-on-windows/](https://sparkbyexamples.com/spark/apache-spark-installation-on-windows/)
 
 - Corretto JDK 21のインストール
 
@@ -61,7 +61,7 @@
     spark-shell
     ```
 
-## IntelliJ IDEAの開発環境構築手順
+## 4. IntelliJ IDEAの開発環境構築手順
 - IntelliJ IDEA Community Editionのインストール
 
     ```sh    
@@ -81,23 +81,59 @@
     - sbtをビルドツールとして利用する。
     - Scalaのバージョン: 2.13.18　を指定する。
 
-## サンプルAPの動作確認手順
-### IntelliJからのAPの端末ローカルSpark実行
-- 端末ローカルでSpark実行する方法です。
+## 5. 簡単なSparkのサンプルAPのローカル動作確認手順
+- ごく簡単なSparkのサンプルAPを、IntelliJから端末ローカルでSpark実行する方法です。 
+- サンプルを動作させる際は、testdata/inputディレクトリにあるデータを「C:\temp」にコピーしてください
+    - ファイルパスを変更したい場合は、各Scalaファイル内の該当箇所を修正してください。
+
+- 以下に、簡単なサンプルコードを作成しているので、IntelliJで、各Scalaファイルを開いてmainメソッドを実行してください。
+    - [HelloWorld.scala](./application/src/main/scala/HelloWorld.scala)
+        - もっとも簡単なHello WorldのSparkアプリケーション
+    - [Tutorial.scala](./application/src/main/scala/Tutorial.scala)
+        - Readme.md内の単語の数を数えるSparkアプリケーション
+    - [TutorialForDataset.scala](./application/src/main/scala/TutorialForDataset.scala)
+        - Datasetを使ったSparkアプリケーション
+    - [TutorialForParquet.scala](./application/src/main/scala/TutorialForParquet.scala)
+        - Parquetファイルを使ったSparkアプリケーション
+    - [SparkSQLExample.scala](./application/src/main/scala/SparkSQLExample.scala)
+        - Spark SQLを使ったSparkアプリケーション
+
+
+## 6. ソフトウェアフレームワーク
+- TBD
+    - 以前作成した[Hadoop SparkのサンプルAP](https://github.com/mysd33/spark_dev)をもとにした機能を移植中です。
+
+| 機能            | 機能概要                                                                                                                                                                                                                                                        | 拡張実装の格納パッケージ                                                                                                |
+|---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
+| バッチAP実行制御     | クラウドサービスやSparkのディストリビューションによるSpark実装に応じたAPの起動方法や、ファイルやテーブルを実現するストレージの位置情報やファイル形式の差異を隠蔽し、ジョブ実行する汎用的なAPIを提供する。<br/>これにより、業務固有のロジックだけに注力して開発し、Sparkのクラスタ上でなくても、テスト実行しやすいAP構造とする。                                                                               | com.example.fw.app                                                                                          |
+| ロギング          | Spark上で実行されるAPのログを出力するための汎用的なAPIを提供する。<br/>動作環境によって、ログの出力先等、ログレベル、フォーマット変更を切り替え可能にする。                                                                                                                                                                       | com.example.fw.domain.logging                                                                               |
+| メッセージ管理       | ログに出力メッセージを管理する。メッセージフォーマットを変更しやすいようにプロパティファイルに切り出し、キー対する値としてメッセージ文字列を取得したり、置き換え文字（プレースホルダ）にも対応する。                                                                                                                                                          | com.example.fw.domain.message                                                                               |
+| プロパティ管理       | 動作環境によって変わるパラメータの設定を管理しやすくする。<br/>プロパティファイル、OS環境変数、起動時の引数（システムプロパティ）で指定することで、設定値を切り替え可能とする。                                                                                                                                                                 | com.example.fw.domain.utils                                                                                 |
+| ファイル・テーブルアクセス | クラウドサービスやSparkのディストリビューションといった実行環境の際に応じて、ファイルやテーブルの物理的配置先や通信プロトコル、データ形式（例えば、ローカルではOSファイルシステムだがクラウドだとHDFSやS3、通常のSparkならParquetだがDatabricksならDeltaLakeに切り替える等）ため、実際のデータ形式（）を抽象化した汎用的なAPIを提供し、環境によってファイル形式やファイルパスを切り替え可能にして、Sparkのクラスタ上でなくても、テスト実行しやすいAP構造とする。 | com.example.fw.domain.dataaccess<br/>com.example.fw.domain.model<br/>com.example.fw.domain.infra.dataaccess |
+| 単体テストコード作成支援  | Sparkのクラウド環境がなくても、開発端末やCIサーバ上で、ビジネスロジックを単体テスト実行できるようにするためのテストコード作成支援機能を提供する。                                                                                                                                                                                | com.example.fw.test                                                                                         |
+| 結合テストコード作成支援  | Sparkのクラウド環境がなくても、開発端末やCIサーバ上で、ジョブに対する処理テスト（結合テスト）を実行できるようにするためのテストコード作成支援機能を提供する。                                                                                                                                                                          | com.example.fw.it                                                                                           |
+
+
+## 7. 拡張ソフトウェアフレームワークを使ったサンプルAPのローカル動作確認手順
+- 本ソフトウェアフレームワークを使ったより実践的なサンプルAPをIntelliJから端末ローカルでSpark実行する方法です。
+
 - サンプルを動作させる際は、testdata/inputディレクトリにあるデータを「C:\temp」にコピーしてください
     - applicaitonプロジェクト/src/main/resources/application-dev.propertiesのbasepathプロパティを変更すれば違うディレクトリにも変更可能です
-- AP起動方法
-    - 「Edit Configurations（構成の編集）」で「アプリケーション」を作成
-    - 「メインクラス」に「com.example.fw.app.ApplicationEntryPoint」を設定
-    - 「プログラムの引数」に対象Logicクラスの完全修飾名を設定
-        - 例）com.example.sample.logic.SampleDataSetBLogic3
-    - 「VMパラメータ」に「-Dactive.profile=dev」を設定
-    - または「環境変数」に「ACTIVE_PROFILE=dev」と設定
-    - 「作業ディレクトリ」はプロジェクトのルートフォルダを設定
-        - 例）C:\Users\masas\git\sample-spark
-    - 「-cp」（クラスパス）は「sample-spark.application」を設定
+- 拡張フレームワークを使っているため、同じメインクラスを使って指定したビジネスロジック（Logic）クラスを実行できるようになっています。
 
-## ビルド
+- AP起動方法
+    - IntelliJの「Edit Configurations（構成の編集）」で「アプリケーション」を作成
+    - 「メインクラス」に「`com.example.fw.app.ApplicationEntryPoint`」を設定
+    - 「プログラムの引数」に対象Logicクラスの完全修飾名を設定
+        - 例）`com.example.sample.logic.SampleDataSetBLogic3`
+    - 「VMパラメータ」に「`-Dactive.profile=dev`」を設定
+        - または「環境変数」に「ACTIVE_PROFILE=dev」と設定
+        - ローカル実行時の設定で動作させることができます。
+    - 「作業ディレクトリ」はプロジェクトのルートフォルダを設定（通常は、デフォルトのまま）
+        - 例）C:\Users\xxxx\git\sample-spark
+    - 「-cp」（クラスパス）は「`sample-spark.application`」（アプリケーションのプロジェクト）を設定
+
+## 8. ビルド
 - IntelliJのsbt shellの場合
     ```
     > package
@@ -108,24 +144,24 @@
     sbt package
     ```
 
-## 単体テスト
+## 9. 単体テスト
 - TBD
 
-## 実行可能JAR（アセンブリ）の作成
+## 10. 実行可能JAR（アセンブリ）の作成
 - TBD
 
-## CI/CD
+## 11. CI/CD
 - TBD
 
-## EMRでのApache Spark実行手順
+## 12. EMR上でのApache Spark実行手順
 - TBD
  
-## Step FunctionsでのApache Spark実行手順
+## 13. Step FunctionsでのApache Spark実行手順
 - TBD
 
-## ソフトウェアフレームワーク
+## 14. Step FunctionsでのApache Spark実行手順
 - TBD
-    - 以前作成した[Hadoop SparkのサンプルAP](https://github.com/mysd33/spark_dev)をもとにした機能を提供予定
+
     
 
 
