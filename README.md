@@ -11,15 +11,15 @@
     - Apache Spark 4.0.1
 
 ## プロジェクト構成
-- TBD
+- sample-spark ルートプロジェクト
+    - application 業務APサブプロジェクト
+    - sparkFramework SparkAPのAP基盤サブプロジェクト。Spark標準機能のみに依存
+    - sparkTestFramework SparkAP用の拡張テストフレームワークサブプロジェクト
+    - testdata 業務APを動作させるためのテストデータファイルのフォルダ
 
-## サンプルAPの動作確認手順
-- TBD
-
-## ソフトウェアフレームワーク
-- 以前作成した[Hadoop SparkのサンプルAP](https://github.com/mysd33/spark_dev)をもとにした機能を提供予定
 
 ## WindowsでのApache Spark環境構築手順
+- Windows 11で、Hadoop/Sparkの開発環境を構築する手順を示す。
 - 参考: [https://sparkbyexamples.com/spark/apache-spark-installation-on-windows/](https://sparkbyexamples.com/spark/apache-spark-installation-on-windows/)
 
 - Corretto JDK 21のインストール
@@ -51,12 +51,12 @@
             - `%SPARK_HOME%\bin`
 
 - winutils.exeの配置
-    - `winutils.exe`を[こちら](https://github.com/kontext-tech/winutils/tree/master/hadoop-3.4.0-win10-x64/bin)からダウンロードする
-    - `winutils.exe`を`%HADOOP_HOME%\bin`（C:\Java\spark-4.0.1-bin-hadoop3\bin）に配置する。
+    - `winutils.exe`と`hadoop.dll`を[こちら](https://github.com/kontext-tech/winutils/tree/master/hadoop-3.4.0-win10-x64/bin)からダウンロードする
+    - `winutils.exe`と`hadoop.dll`を`%****HADOOP_HOME%\bin`（C:\Java\spark-4.0.1-bin-hadoop3\bin）に配置する。
 
 - Sparkの動作確認
     - spark-shellを起動する。
-    
+
     ```sh
     spark-shell
     ```
@@ -79,4 +79,53 @@
 
 - IntelliJで、Scalaのプロジェクトの作成
     - sbtをビルドツールとして利用する。
-    - Scalaのバージョン: 2.13.18
+    - Scalaのバージョン: 2.13.18　を指定する。
+
+## サンプルAPの動作確認手順
+### IntelliJからのAPの端末ローカルSpark実行
+- 端末ローカルでSpark実行する方法です。
+- サンプルを動作させる際は、testdata/inputディレクトリにあるデータを「C:\temp」にコピーしてください
+    - applicaitonプロジェクト/src/main/resources/application-dev.propertiesのbasepathプロパティを変更すれば違うディレクトリにも変更可能です
+- AP起動方法
+    - 「Edit Configurations（構成の編集）」で「アプリケーション」を作成
+    - 「メインクラス」に「com.example.fw.app.ApplicationEntryPoint」を設定
+    - 「プログラムの引数」に対象Logicクラスの完全修飾名を設定
+        - 例）com.example.sample.logic.SampleDataSetBLogic3
+    - 「VMパラメータ」に「-Dactive.profile=dev」を設定
+    - または「環境変数」に「ACTIVE_PROFILE=dev」と設定
+    - 「作業ディレクトリ」はプロジェクトのルートフォルダを設定
+        - 例）C:\Users\masas\git\sample-spark
+    - 「-cp」（クラスパス）は「sample-spark.application」を設定
+
+## ビルド
+- IntelliJのsbt shellの場合
+    ```
+    > package
+    ```
+
+- sbtコマンドの場合
+    ```
+    sbt package
+    ```
+
+## 単体テスト
+- TBD
+
+## 実行可能JAR（アセンブリ）の作成
+- TBD
+
+## CI/CD
+- TBD
+
+## EMRでのApache Spark実行手順
+- TBD
+ 
+## Step FunctionsでのApache Spark実行手順
+- TBD
+
+## ソフトウェアフレームワーク
+- TBD
+    - 以前作成した[Hadoop SparkのサンプルAP](https://github.com/mysd33/spark_dev)をもとにした機能を提供予定
+    
+
+
