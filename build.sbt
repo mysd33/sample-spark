@@ -33,7 +33,7 @@ lazy val sparkTestFramework = (project in file("sparkTestFramework"))
   .settings(
     name := "sparkTestFramework",
     libraryDependencies ++= Seq(
-      "org.scalatest" %% "scalatest" % scalatestVersion % Test,
+      "org.scalatest" %% "scalatest" % scalatestVersion,
     )
   )
 
@@ -41,8 +41,12 @@ lazy val sparkTestFramework = (project in file("sparkTestFramework"))
 // Application Project
 lazy val application = (project in file("application"))
   .dependsOn(sparkFramework)
+  .dependsOn(sparkTestFramework % Test)
   .settings(
     name := "application", version := "0.0.1",
+    libraryDependencies ++= Seq(
+      "org.scalatest" %% "scalatest" % scalatestVersion % Test,
+    )
   )
 
 // IntegrationTest用プロジェクト
