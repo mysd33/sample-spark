@@ -10,7 +10,8 @@ lazy val root = (project in file("."))
   .enablePlugins(ScalaUnidocPlugin)
   .aggregate(application, sparkFramework)
   .settings(
-    name := "sample-spark"
+    name := "sample-spark",
+    ScalaUnidoc / unidoc / unidocProjectFilter := inAnyProject -- inProjects(application)
   )
 
 // Spark Software Framework Project
@@ -39,7 +40,6 @@ lazy val sparkTestFramework = (project in file("sparkTestFramework"))
 
 // Application Project
 lazy val application = (project in file("application"))
-  //Integration Test対応(sbt it:test)
   .dependsOn(sparkFramework)
   .settings(
     name := "application", version := "0.0.1",
