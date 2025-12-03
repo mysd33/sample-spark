@@ -6,7 +6,6 @@ import com.example.fw.domain.model.{DataModel, TextLineModel}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
 
-// 現状、エラーが出てうまく動かない
 /**
  * AP基盤を使ったサンプル
  *

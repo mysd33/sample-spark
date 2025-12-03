@@ -144,6 +144,16 @@
         - 例）C:\Users\xxxx\git\sample-spark
     - 「-cp」（クラスパス）は「`sample-spark.application`」（アプリケーションのプロジェクト）を設定
 
+- 注意事項
+    - RDDを使ったロジックの実行の場合は、JDK 9以降のモジュールシステムの影響で、以下のVMオプションを追加する必要があります。
+    - 「VMパラメータ」に以下を追加してください。
+    
+        ```
+        --add-opens=java.base/java.nio=ALL-UNNAMED
+        --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+        --add-opens=java.base/java.util=ALL-UNNAMED
+        ```
+
 ## 8. ビルド
 - IntelliJのsbt shellの場合
     ```

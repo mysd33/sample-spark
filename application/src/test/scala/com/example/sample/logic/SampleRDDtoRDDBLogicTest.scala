@@ -5,7 +5,6 @@ import com.example.fw.domain.utils.ResourceBundleManager
 import com.example.fw.infra.dataaccess.StandardSparkDataModelReaderWriter
 import com.example.fw.test.SparkTestFunSuite
 
-// TODO: 現状、エラーが出てうまく動かない
 /**
  * AP基盤のテストフレームワークを利用したテストコードの例
  */
