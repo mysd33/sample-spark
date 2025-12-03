@@ -52,7 +52,7 @@
 
 - winutils.exeの配置
     - `winutils.exe`と`hadoop.dll`を[こちら](https://github.com/kontext-tech/winutils/tree/master/hadoop-3.4.0-win10-x64/bin)からダウンロードする
-    - `winutils.exe`と`hadoop.dll`を`%****HADOOP_HOME%\bin`（C:\Java\spark-4.0.1-bin-hadoop3\bin）に配置する。
+    - `winutils.exe`と`hadoop.dll`を`%HADOOP_HOME%\bin`（C:\Java\spark-4.0.1-bin-hadoop3\bin）に配置する。
 
 - Sparkの動作確認
     - spark-shellを起動する。
@@ -126,6 +126,7 @@
     - 「メインクラス」に「`com.example.fw.app.ApplicationEntryPoint`」を設定
     - 「プログラムの引数」に対象Logicクラスの完全修飾名を設定
         - 例）`com.example.sample.logic.SampleDataSetBLogic3`
+        - [Logicクラスのフォルダ](./application/src/main/scala/com/example/sample/logic)に、サンプルがいろいろあるので実行したいLogicクラスを選択する
     - 「VMパラメータ」に「`-Dactive.profile=dev`」を設定
         - または「環境変数」に「ACTIVE_PROFILE=dev」と設定
         - ローカル実行時の設定で動作させることができます。
