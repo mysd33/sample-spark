@@ -17,6 +17,7 @@ abstract class SparkTestFunSuite extends AnyFunSuite with BeforeAndAfter with Be
   }
   lazy protected val sparkContext: SparkContext = sparkSession.sparkContext
 
+
   override protected def beforeAll(): Unit = {
   }
 

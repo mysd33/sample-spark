@@ -1,9 +1,9 @@
 ThisBuild / version := "0.1.0-SNAPSHOT"
-
 ThisBuild / scalaVersion := "2.13.18"
 
 lazy val sparkVersion ="4.0.1"
 lazy val scalatestVersion = "3.2.19"
+lazy val mockitoVersion = "2.0.0"
 
 lazy val root = (project in file("."))
   // https://github.com/sbt/sbt-unidoc#how-to-unify-scaladoc
@@ -46,6 +46,7 @@ lazy val application = (project in file("application"))
     name := "application", version := "0.0.1",
     libraryDependencies ++= Seq(
       "org.scalatest" %% "scalatest" % scalatestVersion % Test,
+      "org.mockito" %% "mockito-scala" % mockitoVersion % Test,
     )
   )
 

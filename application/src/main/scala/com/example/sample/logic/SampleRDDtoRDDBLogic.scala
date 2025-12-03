@@ -6,6 +6,7 @@ import com.example.fw.domain.model.{DataModel, TextLineModel}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
 
+// 現状、エラーが出てうまく動かない
 /**
  * AP基盤を使ったサンプル
  *
@@ -18,7 +19,7 @@ class SampleRDDtoRDDBLogic(dataModelReaderWriter: DataModelReaderWriter)
   override val outputModel: DataModel[(String, Int)] = TextLineModel[(String, Int)]("WordCount")
 
   override def process(rddList: Seq[RDD[String]], sparkSession: SparkSession): RDD[(String, Int)] = {
-    val textFile = rddList(0)
+    val textFile = rddList.head
     val words = textFile.flatMap(line => line.split(" "))
     val wordCounts = words.map(word => (word, 1)).reduceByKey((a,b) => a+b)
     wordCounts

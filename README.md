@@ -14,6 +14,7 @@
 - 以下のプロジェクト構成です。通常は、IntelliJ IDEAでのプロジェクトとして読み込んでください。
     - sample-spark： ルートプロジェクト
         - application： 業務APサブプロジェクト
+        - integraion: 業務APの結合テストサブプロジェクト
         - sparkFramework： SparkAPのAP基盤サブプロジェクト。Spark標準機能のみに依存
         - sparkTestFramework： SparkAP用の拡張テストフレームワークサブプロジェクト
         - testdata： 業務APを動作させるためのテストデータファイルのフォルダ
@@ -23,6 +24,7 @@
     - 参考: [https://sparkbyexamples.com/spark/apache-spark-installation-on-windows/](https://sparkbyexamples.com/spark/apache-spark-installation-on-windows/)
 
 - Corretto JDK 21のインストール
+    - PowerShellを管理者権限で起動し、以下のコマンドを実行する。
 
     ```sh
     winget install -e --id Amazon.Corretto.21.JDK
@@ -63,6 +65,7 @@
 
 ## 4. IntelliJ IDEAの開発環境構築手順
 - IntelliJ IDEA Community Editionのインストール
+    - PowerShellを管理者権限で起動し、以下のコマンドを実行する。
 
     ```sh    
     winget install -e --id JetBrains.IntelliJIDEA.Community
@@ -72,9 +75,16 @@
     - 参考: [https://pleiades.io/help/idea/get-started-with-scala.html](https://pleiades.io/help/idea/get-started-with-scala.html)
 
     ```sh
-
     cd C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2025.1.3\bin
     idea64.exe installPlugins org.intellij.scala
+    ```
+
+- sbtのインストール
+    - IntelliJ IDEAのScalaプラグインをインストールすれば、sbtは不要ですが、コマンドラインでsbtを使いたい場合は、以下の手順でインストールします。
+    - PowerShellを管理者権限で起動し、以下のコマンドを実行する。
+
+    ```sh
+    winget install -e --id sbt.sbt
     ```
 
 - IntelliJで、Scalaのプロジェクトの作成
@@ -126,7 +136,7 @@
     - 「メインクラス」に「`com.example.fw.app.ApplicationEntryPoint`」を設定
     - 「プログラムの引数」に対象Logicクラスの完全修飾名を設定
         - 例）`com.example.sample.logic.SampleDataSetBLogic3`
-        - [Logicクラスのフォルダ](./application/src/main/scala/com/example/sample/logic)に、サンプルがいろいろあるので実行したいLogicクラスを選択する
+            - [Logicクラスのフォルダ](./application/src/main/scala/com/example/sample/logic)に、サンプルがいろいろあるので実行したいLogicクラスを選択する
     - 「VMパラメータ」に「`-Dactive.profile=dev`」を設定
         - または「環境変数」に「ACTIVE_PROFILE=dev」と設定
         - ローカル実行時の設定で動作させることができます。
@@ -146,6 +156,32 @@
     ```
 
 ## 9. 単体テスト
+- 単体テストコードは、「application」プロジェクトの「src/test/scala」ディレクトリに格納します
+- IntelliJで指定したテストクラス実行の場合
+    - 「構成の編集」で「ScalaTest」を作成
+    - 「テストクラス」に対象テストクラスを設定
+        - 例）`com.example.sample.logic.UTDemoDatasetBLogicTest`
+        - [テストクラスのフォルダ](./application/src/test/resources/application-ut.propertiesに、サンプルがいろいろあるので実行したいLogicクラスを選択する
+    - 「VMパラメータ」に「-Dactive.profile=ut」を設定
+        - または「環境変数」に「ACTIVE_PROFILE=ut」と設定
+    - 「クラスパスとJDK」は「`sample-spark.application.test`」
+
+- IntelliJのsbt shellでのテスト実行の場合  
+    - 「ファイル」-「設定」で、「ビルド、実行、デプロイ」の「sbt」の設定で「VMパラメータ」で「-Dactive.profile=ut」を設定しておく
+        
+    - 以下実行
+
+        ```
+        > test
+        ```
+
+- sbtコマンドでのテスト実行の場合
+
+  ```
+  sbt -Dactive.profile=ut test
+  ```
+
+## 結合テスト
 - TBD
 
 ## 10. 実行可能JAR（アセンブリ）の作成

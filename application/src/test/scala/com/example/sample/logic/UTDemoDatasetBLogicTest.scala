@@ -7,9 +7,8 @@ import com.example.fw.test.SparkTestFunSuite
 import com.example.sample.common.logic.SampleSharedLogic
 import com.example.sample.common.rule.PersonRule
 import com.example.sample.common.entity.Person
-import org.mockito.Mockito._
-import org.scalatestplus.mockito._
 import org.mockito.ArgumentMatchers._
+import org.mockito.MockitoSugar
 
 /**
  * AP基盤のテストフレームワークを利用したテストコードの例
@@ -18,7 +17,7 @@ import org.mockito.ArgumentMatchers._
  */
 class UTDemoDatasetBLogicTest extends SparkTestFunSuite with MockitoSugar {
   test("UTDemoDatasetBLogicTest.process") {
-    println("active.profile:" + ResourceBundleManager.getActiveProfile())
+    println("active.profile:" + ResourceBundleManager.getActiveProfile)
     import sparkSession.implicits._
     //入力
     val inputDs = Seq(
@@ -40,7 +39,7 @@ class UTDemoDatasetBLogicTest extends SparkTestFunSuite with MockitoSugar {
     //Mockの戻り値の設定
     when(sampleSharedLogicMock.execute(any())).thenReturn(inputDs)
     //ビジネスルールクラスのMock Serializableで作成
-    val personRuleMock = mock[PersonRule](withSettings().serializable())
+    val personRuleMock = mock[PersonRule](withSettings.serializable())
     //Mockの戻り値の設定
     when(personRuleMock.calcAge(any())).thenReturn(20)
 

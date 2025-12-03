@@ -11,7 +11,7 @@ import com.example.sample.common.entity.Person
  */
 class SampleDataSetBLogic3Test extends SparkTestFunSuite {
   test("SampleDatasetBLogic3.process") {
-    println("active.profile:" + ResourceBundleManager.getActiveProfile())
+    println("active.profile:" + ResourceBundleManager.getActiveProfile)
     import sparkSession.implicits._
     //入力
     val inputDs = Seq(
