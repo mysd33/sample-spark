@@ -167,32 +167,78 @@
 
 ## 9. 単体テスト
 - 単体テストコードは、「application」プロジェクトの「src/test/scala」ディレクトリに格納します
+- 通常のクラスはそのままIntelliJからテスト実行できます。
+- Logicクラスに関しては、Spark実行環境に依存するテストであるため、以下のようにプロファイルの設定が必要です。
 - IntelliJで指定したテストクラス実行の場合
     - 「構成の編集」で「ScalaTest」を作成
     - 「テストクラス」に対象テストクラスを設定
         - 例）`com.example.sample.logic.UTDemoDatasetBLogicTest`
-        - [テストクラスのフォルダ](./application/src/test/resources/application-ut.propertiesに、サンプルがいろいろあるので実行したいLogicクラスを選択する
-    - 「VMパラメータ」に「-Dactive.profile=ut」を設定
+        - [テストクラスのフォルダ](./application/src/test/scala)に、サンプルがあるので実行したいLogicクラスのテストを選択する
+    - Logicクラスの「VMパラメータ」に「-Dactive.profile=ut」を設定
         - または「環境変数」に「ACTIVE_PROFILE=ut」と設定
-    - 「クラスパスとJDK」は「`sample-spark.application.test`」
+        - なお、RDDを使ったロジックの実行の場合は、JDK 9以降のモジュールシステムの影響で、以下のVMオプションを追加する必要があります。
+            - 「VMパラメータ」に--add-opensオプションをさらに追加してください。
+
+                ```
+                --add-opens=java.base/java.nio=ALL-UNNAMED
+                --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+                --add-opens=java.base/java.util=ALL-UNNAMED
+                -Dactive.profile=it
+                ```    
+    - 「クラスパスとモジュール」は「`sample-spark.application.test`」                
+
+
+- sbtコマンドでのテスト実行の場合
+    - build.sbt側で必要なオプションを指定しているため、以下のコマンドで実行可能
+
+    ```
+    sbt application/test
+    ```
 
 - IntelliJのsbt shellでのテスト実行の場合  
-    - 「ファイル」-「設定」で、「ビルド、実行、デプロイ」の「sbt」の設定で「VMパラメータ」で「-Dactive.profile=ut」を設定しておく
-        
     - 以下実行
 
         ```
-        > test
+        > application/test
         ```
 
-- sbtコマンドでのテスト実行の場合
-
-  ```
-  sbt -Dactive.profile=ut test
-  ```
 
 ## 結合テスト
-- TBD
+- 結合テスト（処理テスト）コードは、「integration」プロジェクトの「src/test/scala」ディレクトリに格納します
+- Spark実行環境に依存するテストであるため、以下のようにプロファイルの設定が必要です。
+- IntelliJで指定したテストクラス実行の場合
+    - 「構成の編集」で「ScalaTest」を作成
+    - 「テストクラス」に対象テストクラスを設定
+        - 例）`com.example.sample.logic.ITDemoDatasetBLogicTest`
+        - [テストクラスのフォルダ](./integration/src/test/scala/)に、サンプルがあるので実行したいLogicクラスを選択する
+    - 「VMパラメータ」に「-Dactive.profile=it」を設定
+        - または「環境変数」に「ACTIVE_PROFILE=it」と設定
+        - なお、RDDを使ったロジックの実行の場合は、JDK 9以降のモジュールシステムの影響で、以下のVMオプションを追加する必要があります。
+            - 「VMパラメータ」に--add-opensオプションをさらに追加してください。
+
+                ```
+                --add-opens=java.base/java.nio=ALL-UNNAMED
+                --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+                --add-opens=java.base/java.util=ALL-UNNAMED
+                -Dactive.profile=it
+                ```    
+
+    - 「クラスパスとJDK」は「`sample-spark.integration.test`」
+
+- sbtコマンドでのテスト実行の場合
+    - build.sbt側で必要なオプションを指定しているため、以下のコマンドで実行可能
+
+    ```
+    sbt integration/test
+    ```
+
+- IntelliJのsbt shellでのテスト実行の場合
+    - 以下実行
+
+        ```
+        > integration/test
+        ```
+
 
 ## 10. 実行可能JAR（アセンブリ）の作成
 - TBD

@@ -1,11 +1,5 @@
 ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / scalaVersion := "2.13.18"
-// RDDを使った動作確認には、JDK 9以降のモジュールシステムの影響で以下のJVMオプションが必要
-Test / javaOptions ++= Seq(
-  "--add-opens=java.base/java.nio=ALL-UNNAMED",
-  "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED",
-  "--add-opens=java.base/java.util=ALL-UNNAMED"
-)
 
 lazy val sparkVersion ="4.0.1"
 lazy val scalatestVersion = "3.2.19"
@@ -53,14 +47,31 @@ lazy val application = (project in file("application"))
     libraryDependencies ++= Seq(
       "org.scalatest" %% "scalatest" % scalatestVersion % Test,
       "org.mockito" %% "mockito-scala" % mockitoVersion % Test,
+    ),
+    Test / fork := true,
+    // RDDを使った動作確認には、JDK 9以降のモジュールシステムの影響で以下のJVMオプションが必要
+    Test / javaOptions ++= Seq(
+      "--add-opens=java.base/java.nio=ALL-UNNAMED",
+      "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED",
+      "--add-opens=java.base/java.util=ALL-UNNAMED",
+      "-Dactive.profile=ut"
     )
   )
 
 // IntegrationTest用プロジェクト
 lazy val integration = (project in file("integration"))
   .dependsOn(root)
+  .dependsOn(application)
   .dependsOn(sparkTestFramework % Test)
   .settings(
     publish / skip := true,
+    Test / fork := true,
+    // RDDを使った動作確認には、JDK 9以降のモジュールシステムの影響で以下のJVMオプションが必要
+    Test / javaOptions ++= Seq(
+      "--add-opens=java.base/java.nio=ALL-UNNAMED",
+      "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED",
+      "--add-opens=java.base/java.util=ALL-UNNAMED",
+      "-Dactive.profile=it"
+    )
   )
 

@@ -1,7 +1,6 @@
 package com.example.fw.it
 
 import java.io.File
-
 import com.example.fw.app.StandardSparkSessionManager.createSparkSession
 import com.example.fw.app.{StandardSparkDataModelReaderWriterFactory, StandardSparkSessionManager}
 import com.example.fw.domain.const.FWConst
@@ -10,6 +9,7 @@ import com.example.fw.domain.utils.ResourceBundleManager
 import com.example.fw.domain.utils.Using.using
 import com.example.fw.test.AssertUtils
 import org.apache.commons.io.FileUtils
+import org.apache.spark.internal.Logging
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{Dataset, SparkSession}
 import org.scalatest.funsuite.AnyFunSuite
@@ -20,7 +20,7 @@ import scala.jdk.CollectionConverters._
 /**
  * 結合テスト用基底テストクラス
  */
-abstract class SparkIntegrationTestFunSuite extends AnyFunSuite with BeforeAndAfter with BeforeAndAfterAll {
+abstract class SparkIntegrationTestFunSuite extends AnyFunSuite with BeforeAndAfter with BeforeAndAfterAll with Logging {
 
   /**
    * 入力テストデータ
@@ -35,11 +35,20 @@ abstract class SparkIntegrationTestFunSuite extends AnyFunSuite with BeforeAndAf
 
 
   override protected def beforeAll(): Unit = {
+    // TODO: IntelliJでテスト対象クラスを実行した場合と、sbt integration/testで実行した場合で相対パスによる指定により絶対パスが違ってしまう
+    // TODO: このため現状、testdataフォルダを、プロジェクト直下と、integration直下の両方に配置して対応している。
     val inputTestDataDir = new File(inputTestDataDirPath)
+    // 入力データファイルパスをログに出力
+    logInfo(s"Input test data directory path: ${inputTestDataDir.getAbsolutePath}")
     //TODO: 配下のディレクトリをまるっとコピー
     //テストデータをワーキングディレクトリにコピー
     val inputTestFiles = FileUtils.listFiles(inputTestDataDir, null, false)
-
+    //テストデータファイル件数をログに出力
+    logInfo(s"Number of test input files: ${inputTestFiles.size()}")
+    //対象ファイルをログに出力
+    inputTestFiles.forEach(
+      f => logInfo(s"Copying test input file: ${f.getAbsolutePath}")
+    )
     inputTestFiles.asScala.foreach(f => FileUtils.copyFileToDirectory(f, workingDir))
   }
 
