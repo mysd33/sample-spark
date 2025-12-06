@@ -5,11 +5,19 @@ lazy val sparkVersion ="4.0.1"
 lazy val scalatestVersion = "3.2.19"
 lazy val mockitoVersion = "2.0.0"
 
+lazy val commonSettings = Seq(
+  //sbt assemblyで、テストをスキップ
+  assembly / test := {},
+  autoAPIMappings := true,
+  scalacOptions ++= Seq("-encoding", "UTF-8")
+)
+
 lazy val root = (project in file("."))
   // https://github.com/sbt/sbt-unidoc#how-to-unify-scaladoc
   .enablePlugins(ScalaUnidocPlugin)
-  .aggregate(application, sparkFramework)
+  .aggregate(integration, application, sparkFramework)
   .settings(
+    commonSettings,
     name := "sample-spark",
     ScalaUnidoc / unidoc / unidocProjectFilter := inAnyProject -- inProjects(application)
   )
@@ -17,11 +25,11 @@ lazy val root = (project in file("."))
 // Spark Software Framework Project
 lazy val sparkFramework = (project in file("sparkFramework"))
   .settings(
-    //commonSettings,
+    commonSettings,
     name := "sparkFramework",
     libraryDependencies ++= Seq(
       "org.apache.spark" %% "spark-core" % sparkVersion,
-      "org.apache.spark" %% "spark-sql" % sparkVersion,
+      "org.apache.spark" %% "spark-sql" % sparkVersion
     )
   )
 
@@ -43,6 +51,7 @@ lazy val application = (project in file("application"))
   .dependsOn(sparkFramework)
   .dependsOn(sparkTestFramework % Test)
   .settings(
+    commonSettings,
     name := "application", version := "0.0.1",
     libraryDependencies ++= Seq(
       "org.scalatest" %% "scalatest" % scalatestVersion % Test,
@@ -60,11 +69,10 @@ lazy val application = (project in file("application"))
 
 // IntegrationTest用プロジェクト
 lazy val integration = (project in file("integration"))
-  .dependsOn(root)
   .dependsOn(application)
   .dependsOn(sparkTestFramework % Test)
   .settings(
-    publish / skip := true,
+    commonSettings,
     Test / fork := true,
     // RDDを使った動作確認には、JDK 9以降のモジュールシステムの影響で以下のJVMオプションが必要
     Test / javaOptions ++= Seq(

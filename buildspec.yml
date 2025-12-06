@@ -1,41 +1,40 @@
 version: 0.2
 
-env:
-  variables:
-    SONAR_PROJECTNAME: "spark_dev"
-  parameter-store:
-    SONARQUBE_ENDPOINT: /CodeBuild/SonarQubeEndpoint
-    SONARQUBE_TOKEN: /CodeBuild/SonarQubeToken
+#env:
+#  variables:
+#    SONAR_PROJECTNAME: "sample_spark"
+#  parameter-store:
+#    SONARQUBE_ENDPOINT: /CodeBuild/SonarQubeEndpoint
+#    SONARQUBE_TOKEN: /CodeBuild/SonarQubeToken
 phases:
   install:
     runtime-versions:
-      java: corretto8
-  pre_build:
-    commands:
-      - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.5.0.2216-linux.zip
-      - unzip ./sonar-scanner-cli-4.5.0.2216-linux.zip
-      - CURRENT=$(pwd)
-      - ls -l $CURRENT/sonar-scanner-4.5.0.2216-linux/bin/
-      - export PATH=$PATH:$CURRENT/sonar-scanner-4.5.0.2216-linux/bin/
+      java: corretto21
+#  pre_build:
+#    commands:
+#      - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.5.0.2216-linux.zip
+#      - unzip ./sonar-scanner-cli-4.5.0.2216-linux.zip
+#      - CURRENT=$(pwd)
+#      - ls -l $CURRENT/sonar-scanner-4.5.0.2216-linux/bin/
+#      - export PATH=$PATH:$CURRENT/sonar-scanner-4.5.0.2216-linux/bin/
   build:
     commands:
       - echo build
       - sbt clean package
       - echo scaladoc_unidoc
       - sbt unidoc
-      - echo unit_test
-      - sbt -Dactive.profile=ut coverage test
-      - echo integration_test
-      - sbt -Dactive.profile=it it:test
-      - echo create_CoverageReport
-      - sbt coverageReport coverageAggregate
-      - echo SonarQube
-      - sonar-scanner -Dsonar.projectName=$SONAR_PROJECTNAME -Dsonar.projectKey=$SONAR_PROJECTNAME -Dsonar.login=$SONARQUBE_TOKEN -Dsonar.host.url=$SONARQUBE_ENDPOINT
+      - echo unit_test, integration_test
+      - sbt coverage test
+#      - echo create_CoverageReport
+#      - sbt coverageReport coverageAggregate
+#      - echo SonarQube
+#      - sonar-scanner -Dsonar.projectName=$SONAR_PROJECTNAME -Dsonar.projectKey=$SONAR_PROJECTNAME -Dsonar.login=$SONARQUBE_TOKEN -Dsonar.host.url=$SONARQUBE_ENDPOINT
   post_build:
     commands:
       - echo assembly
       - sbt assembly
-reports:
+buildspec:
+  yml:reports:
   test_report:
     files:
       - '**/target/test-reports/*.xml'
@@ -46,7 +45,7 @@ reports:
     file-format: COBERTURAXML
 artifacts:
   files:
-    - 'target/**/databricks_dev-assembly-*.jar'
+    - 'target/**/sample-spark-assembly-*.jar'
     - 'target/**/scoverage-report/**/*'
     - 'target/**/unidoc/**/*'
 cache:

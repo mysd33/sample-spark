@@ -1,5 +1,6 @@
 package com.example.sample.logic
 
+import com.example.fw.domain.utils.ResourceBundleManager
 import com.example.fw.it.SparkIntegrationTestFunSuite
 import com.example.sample.common.entity.Person
 
@@ -11,6 +12,7 @@ class ITDemoDatasetBLogicTest extends SparkIntegrationTestFunSuite {
   override val inputTestDataDirPath: String = "testdata/input"
 
   test("ITDemoDatasetBLogicTest") {
+    println("active.profile:" + ResourceBundleManager.getActiveProfile)
     //テスト対象のFQDNを指定し、runJobメソッドを実行
     runJob("com.example.sample.logic.SampleDataSetBLogic3") {
       //ジョブのテスト結果によるassertの比較対象の実際のDataset（actual）を取得

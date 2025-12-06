@@ -203,7 +203,7 @@
         ```
 
 
-## 結合テスト
+## 10. 結合テスト
 - 結合テスト（処理テスト）コードは、「integration」プロジェクトの「src/test/scala」ディレクトリに格納します
 - Spark実行環境に依存するテストであるため、以下のようにプロファイルの設定が必要です。
 - IntelliJで指定したテストクラス実行の場合
@@ -239,20 +239,39 @@
         > integration/test
         ```
 
+## 11. 全テスト実行
 
-## 10. 実行可能JAR（アセンブリ）の作成
+```
+sbt test
+```
+
+## 12. 実行可能JAR（アセンブリ）の作成
+- TODO: 修正中
+
+- Sparkクラスタ上でAPを実行するためには「sbt package」コマンドで生成するjarではなく、「sbt assembly」を使って必要なclassファイル等を全て1つにまとめた実行可能jarを作成します。
+- なお、テストをスキップするように設定済です
+- 実行すると「（ルートディレクトリ）/target/scala-2.13/」フォルダに「sample-spark-assembly-0.1.0-SNAPSHOT.jar」が作成されます
+- sbtコマンドの場合
+
+    ```
+    sbt assembly
+    ```
+- IntelliJのsbt shellの場合  
+
+    ```
+    > assembly
+    ```
+
+## 13. CI/CD
 - TBD
 
-## 11. CI/CD
-- TBD
-
-## 12. EMR上でのApache Spark実行手順
+## 14. EMR上でのApache Spark実行手順
 - TBD
  
-## 13. Step FunctionsでのApache Spark実行手順
+## 15. Step FunctionsでのApache Spark実行手順
 - TBD
 
-## 14. Step FunctionsでのApache Spark実行手順
+## 16. Step FunctionsでのApache Spark実行手順
 - TBD
 
     
