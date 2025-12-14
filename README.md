@@ -14,8 +14,10 @@
 - 以下のプロジェクト構成です。通常は、IntelliJ IDEAでのプロジェクトとして読み込んでください。
     - sample-spark： ルートプロジェクト
         - application： 業務APサブプロジェクト
+        - dbconnectApplication Databricks接続（DatabricksConnect）用業務APサブプロジェクト　※現在未作成
         - integraion: 業務APの結合テストサブプロジェクト
         - sparkFramework： SparkAPのAP基盤サブプロジェクト。Spark標準機能のみに依存
+        - databricksFramework： Databricks固有の機能に依存するAP基盤サブプロジェクト
         - sparkTestFramework： SparkAP用の拡張テストフレームワークサブプロジェクト
         - testdata： 業務APを動作させるためのテストデータファイルのフォルダ
 

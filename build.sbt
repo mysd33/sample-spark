@@ -4,6 +4,7 @@ ThisBuild / scalaVersion := "2.13.18"
 lazy val sparkVersion ="4.0.1"
 lazy val scalatestVersion = "3.2.19"
 lazy val mockitoVersion = "2.0.0"
+lazy val dbUtilsVersion = "0.1.5"
 
 lazy val commonSettings = Seq(
   //sbt assemblyで、テストをスキップ
@@ -33,7 +34,14 @@ lazy val sparkFramework = (project in file("sparkFramework"))
     )
   )
 
-// TODO: Databricks Specific Software Framework Project
+// Databricks Specific Software Framework Project
+lazy val databricksFramework = (project in file("databricksFramework"))
+  .dependsOn(sparkFramework)
+  .settings(
+    commonSettings,
+    name := "databricksFramework",
+    libraryDependencies ++= Seq("com.databricks" % "databricks-dbutils-scala_2.12" % dbUtilsVersion)
+  )
 
 // Spark Testing Framework Project
 lazy val sparkTestFramework = (project in file("sparkTestFramework"))
@@ -44,7 +52,6 @@ lazy val sparkTestFramework = (project in file("sparkTestFramework"))
       "org.scalatest" %% "scalatest" % scalatestVersion,
     )
   )
-
 
 // Application Project
 lazy val application = (project in file("application"))
@@ -67,7 +74,9 @@ lazy val application = (project in file("application"))
     )
   )
 
-// IntegrationTest用プロジェクト
+// TODO: Databricks Connect Application
+
+// IntegrationTest Project
 lazy val integration = (project in file("integration"))
   .dependsOn(application)
   .dependsOn(sparkTestFramework % Test)
