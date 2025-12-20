@@ -1,13 +1,19 @@
 ThisBuild / version := "0.1.0"
 ThisBuild / scalaVersion := "2.13.18"
 
-lazy val sparkVersion ="4.0.1"
+lazy val sparkVersion ="4.1.0"
 lazy val scalatestVersion = "3.2.19"
 lazy val mockitoVersion = "2.0.0"
 lazy val dbUtilsVersion = "0.1.5"
 lazy val dbconnectVersion = "18.0.0"
 
 lazy val commonSettings = Seq(
+  // TBD: sbt assemblyでjar間でのクラス重複による除外設定(現状、GitHub Copilotによる提案)
+  assembly / assemblyMergeStrategy := {
+    case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+    case "reference.conf"               => MergeStrategy.concat
+    case x                              => MergeStrategy.first
+  },
   //sbt assemblyで、テストをスキップ
   assembly / test := {},
   autoAPIMappings := true,
@@ -15,7 +21,7 @@ lazy val commonSettings = Seq(
 )
 
 lazy val root = (project in file("."))
-  .aggregate(integration, application, sparkFramework, databricksFramework, dbconnectApplication)
+  .aggregate(integration, application, sparkFramework, databricksFramework) //, dbconnectApplication)
   // https://github.com/sbt/sbt-unidoc#how-to-unify-scaladoc
   .enablePlugins(ScalaUnidocPlugin)
   .settings(
@@ -63,7 +69,7 @@ lazy val application = (project in file("application"))
     name := "application", version := "0.0.1",
     libraryDependencies ++= Seq(
       "org.scalatest" %% "scalatest" % scalatestVersion % Test,
-      "org.mockito" %% "mockito-scala" % mockitoVersion % Test,
+      "org.mockito" %% "mockito-scala" % mockitoVersion % Test
     ),
     Test / fork := true,
     // RDDを使った動作確認には、JDK 9以降のモジュールシステムの影響で以下のJVMオプションが必要
@@ -77,6 +83,7 @@ lazy val application = (project in file("application"))
 
 // TODO: Databricks Connect Application　動作未確認
 // https://docs.databricks.com/aws/ja/dev-tools/databricks-connect/scala/
+/*
 lazy val dbconnectApplication = (project in file("dbconnectApplication"))
   .dependsOn(application, databricksFramework)
   .settings(
@@ -90,7 +97,7 @@ lazy val dbconnectApplication = (project in file("dbconnectApplication"))
       "--add-opens=java.base/java.nio=ALL-UNNAMED"
     )
   )
-
+*/
 
 // IntegrationTest Project
 lazy val integration = (project in file("integration"))

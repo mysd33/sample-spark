@@ -156,7 +156,10 @@
         --add-opens=java.base/java.util=ALL-UNNAMED
         ```
 
-## 8. ビルド
+## 8. Databricks接続（Databricks Connect）での動作確認手順
+- TBD
+
+## 9. ビルド
 - IntelliJのsbt shellの場合
     ```
     > package
@@ -167,7 +170,7 @@
     sbt package
     ```
 
-## 9. 単体テスト
+## 10. 単体テスト
 - 単体テストコードは、「application」プロジェクトの「src/test/scala」ディレクトリに格納します
 - 通常のクラスはそのままIntelliJからテスト実行できます。
 - Logicクラスに関しては、Spark実行環境に依存するテストであるため、以下のようにプロファイルの設定が必要です。
@@ -205,7 +208,7 @@
         ```
 
 
-## 10. 結合テスト
+## 11. 結合テスト
 - 結合テスト（処理テスト）コードは、「integration」プロジェクトの「src/test/scala」ディレクトリに格納します
 - Spark実行環境に依存するテストであるため、以下のようにプロファイルの設定が必要です。
 - IntelliJで指定したテストクラス実行の場合
@@ -241,18 +244,16 @@
         > integration/test
         ```
 
-## 11. 全テスト実行
+## 12. 全テスト実行
 
 ```
 sbt test
 ```
 
-## 12. 実行可能JAR（アセンブリ）の作成
-- TODO: 修正中
-
+## 13. 実行可能JAR（アセンブリ）の作成
 - Sparkクラスタ上でAPを実行するためには「sbt package」コマンドで生成するjarではなく、「sbt assembly」を使って必要なclassファイル等を全て1つにまとめた実行可能jarを作成します。
 - なお、テストをスキップするように設定済です
-- 実行すると「（ルートディレクトリ）/target/scala-2.13/」フォルダに「sample-spark-assembly-0.1.0-SNAPSHOT.jar」が作成されます
+- 実行すると「（ルートディレクトリ）/target/scala-2.13/」フォルダに「sample-spark-assembly-0.1.0.jar」が作成されます
 - sbtコマンドの場合
 
     ```
@@ -264,18 +265,13 @@ sbt test
     > assembly
     ```
 
-## 13. CI/CD
+## 14. CI/CD
 - TBD
 
-## 14. EMR上でのApache Spark実行手順
+## 15. EMR上でのApache Spark実行手順
 - TBD
  
-## 15. Step FunctionsでのApache Spark実行手順
-- TBD
-
 ## 16. Step FunctionsでのApache Spark実行手順
-- TBD
-
-    
+- TBD    
 
 
