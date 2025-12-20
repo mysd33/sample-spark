@@ -5,8 +5,6 @@ import com.example.fw.domain.utils.ResourceBundleManager
 import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 import scala.reflect.runtime.universe.TypeTag
 
-import com.databricks.dbutils_v1.DBUtilsHolder.dbutils
-
 //TODO:動作確認テスト未実施
 /**
  * DwhDmModelに対応した、Snowflakeへのテーブルアクセス機能を提供するクラス
@@ -55,6 +53,7 @@ class SnowflakeReaderWriter {
   private val SNOWFLAKE_WAREHOUSE = "snowflake.warehouse"
 
   // Snowflakeのユーザ、パスワード情報
+  private lazy val dbutils = com.databricks.sdk.scala.dbutils.DBUtils.getDBUtils()
   private lazy val user = dbutils.secrets.get(ResourceBundleManager.get(SNOWFLAKE_USERNAME_SCOPE), ResourceBundleManager.get(SNOWFLAKE_USERNAME_KEY))
   private lazy val password = dbutils.secrets.get(ResourceBundleManager.get(SNOWFLAKE_PASSWORD_SCOPE), ResourceBundleManager.get(SNOWFLAKE_PASSWORD_KEY))
 

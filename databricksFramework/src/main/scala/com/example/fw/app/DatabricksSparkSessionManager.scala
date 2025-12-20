@@ -1,6 +1,5 @@
 package com.example.fw.app
 
-import com.databricks.dbutils_v1.DBUtilsHolder.dbutils
 import com.example.fw.domain.const.FWConst
 import com.example.fw.domain.logging.Log4jConfiguration
 import com.example.fw.domain.logic.LogicCreator
@@ -8,6 +7,7 @@ import com.example.fw.domain.utils.ResourceBundleManager
 import org.apache.spark.internal.Logging
 import org.apache.spark.sql.SparkSession
 
+// TODO: 昔のAzure Databricksで動作確認したときの実装からそのままのため見直し用
 /**
  * Databricksアプリケーション用SparkSession管理オブジェクト
  */
@@ -79,6 +79,7 @@ object DatabricksSparkSessionManager extends Logging {
     val accountKeyKey = ResourceBundleManager.get(SQLDW_BLOB_ACCOUNTKEY_KEY)
     if (accountKeyKey != null && accountKeyScope != null && accountKeyKey != null) {
       //DBUtilsはローカル環境では動かないので注意
+      val dbutils = com.databricks.sdk.scala.dbutils.DBUtils.getDBUtils()
       sparkSession.conf.set(accountKeyName, dbutils.secrets.get(accountKeyScope, accountKeyKey))
     }
   }

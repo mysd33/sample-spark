@@ -1,10 +1,11 @@
-ThisBuild / version := "0.1.0-SNAPSHOT"
+ThisBuild / version := "0.1.0"
 ThisBuild / scalaVersion := "2.13.18"
 
 lazy val sparkVersion ="4.0.1"
 lazy val scalatestVersion = "3.2.19"
 lazy val mockitoVersion = "2.0.0"
 lazy val dbUtilsVersion = "0.1.5"
+lazy val dbconnectVersion = "18.0.0"
 
 lazy val commonSettings = Seq(
   //sbt assemblyで、テストをスキップ
@@ -14,9 +15,9 @@ lazy val commonSettings = Seq(
 )
 
 lazy val root = (project in file("."))
+  .aggregate(integration, application, sparkFramework, databricksFramework, dbconnectApplication)
   // https://github.com/sbt/sbt-unidoc#how-to-unify-scaladoc
   .enablePlugins(ScalaUnidocPlugin)
-  .aggregate(integration, application, sparkFramework)
   .settings(
     commonSettings,
     name := "sample-spark",
@@ -40,7 +41,7 @@ lazy val databricksFramework = (project in file("databricksFramework"))
   .settings(
     commonSettings,
     name := "databricksFramework",
-    libraryDependencies ++= Seq("com.databricks" % "databricks-dbutils-scala_2.12" % dbUtilsVersion)
+    libraryDependencies ++= Seq("com.databricks" %% "databricks-dbutils-scala" % dbUtilsVersion)
   )
 
 // Spark Testing Framework Project
@@ -74,7 +75,22 @@ lazy val application = (project in file("application"))
     )
   )
 
-// TODO: Databricks Connect Application
+// TODO: Databricks Connect Application　動作未確認
+// https://docs.databricks.com/aws/ja/dev-tools/databricks-connect/scala/
+lazy val dbconnectApplication = (project in file("dbconnectApplication"))
+  .dependsOn(application, databricksFramework)
+  .settings(
+    commonSettings,
+    name := "dbconnectApplication",
+    libraryDependencies ++= Seq(
+      "com.databricks" %% "databricks-connect" % dbconnectVersion
+    ),
+    fork := true,
+    javaOptions ++= Seq(
+      "--add-opens=java.base/java.nio=ALL-UNNAMED"
+    )
+  )
+
 
 // IntegrationTest Project
 lazy val integration = (project in file("integration"))

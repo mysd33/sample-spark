@@ -3,6 +3,7 @@ package com.example.fw.app
 import com.example.fw.domain.logic.Logic
 import org.apache.spark.sql.SparkSession
 
+// TODO: 昔のAzure Databricksで動作確認したときの実装からそのままのため見直し要
 /**
  * Databricks Notebookで動作させるためのエントリポイント
  *

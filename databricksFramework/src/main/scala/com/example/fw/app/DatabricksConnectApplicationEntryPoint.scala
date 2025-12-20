@@ -4,6 +4,9 @@ import com.example.fw.domain.logic.LogicCreator
 import org.apache.spark.SparkContext
 import org.apache.spark.internal.Logging
 
+// TODO: 昔のAzure Databricksで動作確認したときの実装からそのままのため
+// TODO: 以下参考に実装の見直し要
+// https://docs.databricks.com/aws/ja/dev-tools/databricks-connect/scala/jar-compile
 /**
  * 端末からDatabricks接続する場合のエントリポイントの基底クラス
  *

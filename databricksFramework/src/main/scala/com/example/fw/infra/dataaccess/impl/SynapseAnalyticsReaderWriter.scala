@@ -1,6 +1,5 @@
 package com.example.fw.infra.dataaccess.impl
 
-import com.databricks.dbutils_v1.DBUtilsHolder.dbutils
 import com.example.fw.domain.model.DwDmModel
 import com.example.fw.domain.utils.ResourceBundleManager
 import org.apache.spark.sql.{DataFrame, Dataset, Row, SaveMode, SparkSession}
@@ -123,6 +122,7 @@ class SynapseAnalyticsReaderWriter {
     val urlKey = ResourceBundleManager.get(SQL_DW_URL_KEY)
     val urlScope = ResourceBundleManager.get(SQL_DW_URL_SCOPE)
     //DBUtilsはローカルでは動作しないので注意
+    val dbutils = com.databricks.sdk.scala.dbutils.DBUtils.getDBUtils()
     dbutils.secrets.get(urlScope, urlKey)
   }
 
