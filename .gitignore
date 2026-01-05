@@ -13,3 +13,5 @@ out/
 
 ### Log Files ###
 *.log
+
+*.bkp
