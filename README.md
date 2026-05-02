@@ -72,18 +72,18 @@
     ```
 
 ## 4. IntelliJ IDEAの開発環境構築手順
-- IntelliJ IDEA Community Editionのインストール
+- IntelliJ IDEAのインストール
     - PowerShellを管理者権限で起動し、以下のコマンドを実行する。
 
     ```sh    
-    winget install -e --id JetBrains.IntelliJIDEA.Community
+    winget install -e --id JetBrains.IntelliJIDEA
     ```
 
 - Scalaプラグインのインストール
     - 参考: [https://pleiades.io/help/idea/get-started-with-scala.html](https://pleiades.io/help/idea/get-started-with-scala.html)
 
     ```sh
-    cd C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2025.1.3\bin
+    cd "C:\Program Files\JetBrains\IntelliJ IDEA 2026.1.1\bin"
     idea64.exe installPlugins org.intellij.scala
     ```
 
